@@ -5,9 +5,12 @@ const path = require('path');
 
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
+// utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
+require('dotenv').config();
 
-mongoose.connect('mongodb+srv://js34000:987654AZERTY@cluster0.jary2.mongodb.net/cluster0?retryWrites=true&w=majority',
-  { useNewUrlParser: true,
+mongoose.connect(process.env.DB_URI,
+  { useCreateIndex: true,
+    useNewUrlParser: true,
     useUnifiedTopology: true })
     
   .then(() => console.log('Connexion à MongoDB réussie !'))

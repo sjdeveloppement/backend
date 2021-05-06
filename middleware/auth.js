@@ -9,6 +9,7 @@ module.exports = (req, res ,next) => {
             throw 'User ID non valable !';
         } else {
             next();
+            //console.log(decodedToken.userId);
         }
     } catch (error) {
         res.status(401).json({ error: error | 'Requête non authentifiée !' });

@@ -1,5 +1,15 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const MaskData = require('../node_modules/maskdata'); //utilisation de maskdata pour masquer l'email dans la bdd
+
+
+// option maskdata
+const emailMask2Options={
+    maskWith:"*",
+    unmaskedStartCharactersBeforeAt: 2,
+    unmaskedEndCharactersAfterAt: 3,
+    maskAtTheRate: false
+};
 
 const User = require('../models/User');
 //  signup : cryptage du password, créer l'utilisateur avec le mdp crypté et le mail, puis l'enregistre dans la bdd
@@ -7,7 +17,7 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
        const user = new User({
-           email: req.body.email,
+           email: MaskData.maskEmail2(req.body.email, emailMask2Options), //email masked
            password: hash
        });
        user.save()
@@ -18,7 +28,7 @@ exports.signup = (req, res, next) => {
 };
 // fonction login : recupère l'utilisateur dans la base on regarde si il existe et on compare les identitifiants,  on regarde le hash dans la bdd si c'est bon on lui renvoi son UserId et un token
 exports.login = (req, res , next) => {
-    User.findOne({ email: req.body.email })
+    User.findOne({ email: MaskData.maskEmail2(req.body.email, emailMask2Options) })
     .then(user => {
         if (!user){
             return res.status(401).json({ error: 'Utilisateur non trouvé !'});

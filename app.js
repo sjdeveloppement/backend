@@ -1,6 +1,8 @@
 const express = require('express');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const mongoSanitize = require('express-mongo-sanitize');
 const path = require('path');
 
 const sauceRoutes = require('./routes/sauce');
@@ -27,6 +29,12 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+
+// utilisation de helmet pour sécuriser les cookies
+app.use(helmet());
+
+// utilisation de sanitize pour proteger les champs des injections avec des . ou des $
+app.use(mongoSanitize());
 
 app.use(bodyParser.json());
 

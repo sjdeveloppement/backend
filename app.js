@@ -1,9 +1,9 @@
 const express = require('express');
-const helmet = require('helmet');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const mongoSanitize = require('express-mongo-sanitize');
-const path = require('path');
+const helmet = require('helmet'); //protection xss filtre les script intersites dans le navigateur web
+const bodyParser = require('body-parser'); //extrait les objets JSON des requêtes POST
+const mongoose = require('mongoose'); //plugin de connection pour Mongodb
+const mongoSanitize = require('express-mongo-sanitize'); // import du plugin qui sert à contrer l'injection dans les champs utilisateurs
+const path = require('path'); // accès aux chemins des fichiers
 
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
@@ -33,14 +33,18 @@ app.use((req, res, next) => {
 // utilisation de helmet pour sécuriser les cookies
 app.use(helmet());
 
+app.use(bodyParser.json());
+
 // utilisation de sanitize pour proteger les champs des injections avec des . ou des $
 app.use(mongoSanitize());
 
-app.use(bodyParser.json());
-
+//gestion statique des ressources image dans le repertoire images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
+// routes des sauces
 app.use('/api/sauces', sauceRoutes);
+
+//routes dediées aux users
 app.use('/api/auth', userRoutes);
   
 module.exports = app;

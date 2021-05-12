@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose');// import de mongoose
 const app = require('../app');
-
+// middleware de validation des champs d'entrée utilisateur à importer dans le schema
 const sauceValidator = require('../middleware/sauceValidator');
 const sauceSchema = mongoose.Schema({
     userId: { 
@@ -39,5 +39,5 @@ const sauceSchema = mongoose.Schema({
 });
 
 
-
+//export du schéma pour l'application
 module.exports = mongoose.model('Sauce', sauceSchema);

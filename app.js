@@ -48,7 +48,7 @@ app.use(session({
 // utilisation de helmet pour sécuriser les cookies
 app.use(helmet());
 
-app.use(bodyParser.json());
+app.use(bodyParser.json());// ou app.use(express.json())
 
 // utilisation de sanitize pour proteger les champs des injections avec des . ou des $
 app.use(mongoSanitize());

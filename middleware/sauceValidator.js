@@ -36,7 +36,7 @@ exports.descriptionValidator = [
       }),
       validate({
         validator: 'matches',
-        arguments: /^[a-z\d\-_\s]+$/i, // Regex pour restreindre le type de symboles pour la description de la sauce
+        arguments: /^[a-zéèù\d\-_\s]+$/i, // Regex pour restreindre le type de symboles pour la description de la sauce
         message: "Vous ne pouvez utiliser que des chiffres et des lettres pour la description de la sauce",
       }),
 ];
@@ -47,7 +47,8 @@ exports.pepperValidator = [
         message: 'Le principal ingrédient doit contenir entre 3 et 20 caractères',
       }),
       validate({
-        validator: 'isAlphanumeric', // Ne peut contenir que des caractères alphanumériques
-        message: 'Ne peut contenir que des caractères alphanumériques entre 3 et 20 caractères',
+        validator: 'matches', 
+        arguments: /^[a-zéèù\d\-_\s]+$/i,
+        message: 'Vous ne pouvez utiliser que des chiffres et des lettres',
       }),
 ]

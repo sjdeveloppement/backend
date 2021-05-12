@@ -12,8 +12,23 @@ const emailMask2Options={
 };
 
 const User = require('../models/User');
-//  signup : cryptage du password, créer l'utilisateur avec le mdp crypté et le mail, puis l'enregistre dans la bdd
+// sécurisation du mdp via un schema restrictif lors de l'inscription
+const passwordValidator = require('password-validator');
+const schema = new passwordValidator();
+schema
+.is().min(8) // min 8 caractères
+.has().digits(1) // min 1 chiffre
+.has().uppercase(1) // min 1 caractère majuscule
+.has().lowercase(1) // min 1 caractère minuscule
+.has().symbols(1) // min 1 symbole
+.has().not().spaces(); // ne doit pas contenir d'espace
+
+//  signup : on regarde si le schema du mdp est respecté si ok -> cryptage du password, créer l'utilisateur avec le mdp crypté et le mail, puis l'enregistre dans la bdd
 exports.signup = (req, res, next) => {
+    if(!schema.validate(req.body.password)){
+        res.status(401).json({message: "Mot de passe incomplet, il doit contenir au moins 8 caractères, un chiffre, une majuscule, une minuscule, un symbole et pas d'espace !"});
+        return false;
+    }
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
        const user = new User({
@@ -42,9 +57,9 @@ exports.login = (req, res , next) => {
                 userId: user._id,
                 token: jwt.sign(
                     { userId: user._id },
-                    'RANDOM_TOKEN_SECRET',
+                    process.env.JWT_SECRET_TOKEN,
                     { expiresIn: '24h' }
-                )
+                ),
             });
         })
         .catch(error => status(500).json({ error }));

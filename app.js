@@ -4,9 +4,11 @@ const bodyParser = require('body-parser'); //extrait les objets JSON des requêt
 const mongoose = require('mongoose'); //plugin de connection pour Mongodb
 const mongoSanitize = require('express-mongo-sanitize'); // import du plugin qui sert à contrer l'injection dans les champs utilisateurs
 const path = require('path'); // accès aux chemins des fichiers
+const session = require('cookie-session'); //paramètrage des cookies
 
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
+const { Session } = require('inspector');
 // utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
 require('dotenv').config();
 
@@ -29,6 +31,19 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+
+// sécuriser les cookies
+const expiryDate = new Date(Date.now()+60*60*1000);
+app.use(session({
+  name: 'session',
+  secret: process.env.SEC_SES,
+  cookie: {
+    secure: true,
+    httpOnly: true,
+    domain: 'http://localhost:3000',
+    expires: expiryDate
+  }
+}));
 
 // utilisation de helmet pour sécuriser les cookies
 app.use(helmet());

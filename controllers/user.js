@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const MaskData = require('../node_modules/maskdata'); //utilisation de maskdata pour masquer l'email dans la bdd
 
-
 // option maskdata
 const emailMask2Options={
     maskWith:"*",

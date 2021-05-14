@@ -8,7 +8,7 @@ const session = require('cookie-session'); //paramètrage des cookies
 
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
-const { Session } = require('inspector');
+//const { Session } = require('inspector');
 // utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
 require('dotenv').config();
 

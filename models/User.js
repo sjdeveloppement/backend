@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose');// plugin mongoose qui permet de standardiser les données outil de modélisation d'objets
 
 const uniqueValidator = require('mongoose-unique-validator');// package qui valide l'unicité de l'email
 

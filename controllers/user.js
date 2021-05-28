@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const MaskData = require('../node_modules/maskdata'); //utilisation de maskdata pour masquer l'email dans la bdd
+const MaskData = require('../node_modules/maskdata'); //utilisation de maskdata pour masquer l'email 
+const CryptoJS = require('crypto-js');
 
 // option maskdata
 const emailMask2Options={
@@ -29,9 +30,13 @@ exports.signup = (req, res, next) => {
         return false;
     }
     bcrypt.hash(req.body.password, 10)
+    // hash de l'email
+    //bcrypt.hash(req.body.email, 10)
+    // crypto js
+    //const emailCryptoJs = cryptojs.HmacSHA512(req.body.email,`${process.env.CRYPTOJS_RANDOM_SECRET_KEY}`).toString();
     .then(hash => {
        const user = new User({
-           email: MaskData.maskEmail2(req.body.email, emailMask2Options), //email masked
+           email: req.body.email,//hash //MaskData.maskEmail2(req.body.email, emailMask2Options), //email masked
            password: hash
        });
        user.save()
@@ -42,7 +47,7 @@ exports.signup = (req, res, next) => {
 };
 // fonction login : recupère l'utilisateur dans la base on regarde si il existe et on compare les identitifiants,  on regarde le hash dans la bdd si c'est bon on lui renvoi son UserId et un token
 exports.login = (req, res , next) => {
-    User.findOne({ email: MaskData.maskEmail2(req.body.email, emailMask2Options) })
+    User.findOne({ email: req.body.email })/*MaskData.maskEmail2(req.body.email, emailMask2Options)*///bcrypt.compare(req.body.email, user.email)
     .then(user => {
         if (!user){
             return res.status(401).json({ error: 'Utilisateur non trouvé !'});

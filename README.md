@@ -19,3 +19,6 @@ Accès base de donnée selon 2 profils admininstrateurs identifiants à demander
 - système d'authentification
 - CRUD produits
 - like / dislike produits
+
+## vidéo de présentation de l'application
+(https://www.youtube.com/watch?v=hNQ17VuuSf0)
